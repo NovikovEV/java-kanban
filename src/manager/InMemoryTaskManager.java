@@ -151,9 +151,9 @@ public class InMemoryTaskManager {
         }
     }
 
-    private List<SubTask> getListSubTasksByEpicId(List<Integer> subTasksId) {
+    private List<SubTask> getListSubTasksByEpicId(List<Integer> subTaskIds) {
         List<SubTask> subTasks = new ArrayList<>();
-        for (Integer id : subTasksId) {
+        for (Integer id : subTaskIds) {
             subTasks.add(subTaskMap.get(id));
         }
         return subTasks;
