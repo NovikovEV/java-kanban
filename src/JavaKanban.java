@@ -129,7 +129,7 @@ public class JavaKanban {
         System.out.printf("Список эпиков: %s%n", taskManager.getAllEpics());
         System.out.printf("Список подзадач: %s%n", taskManager.getAllSubTasks());
 
-        System.out.println("\nПосле удаление всех подзадач");
+        System.out.println("\nПосле удаление всех подзадач. Так же меняется статус эпика на NEW");
         taskManager.removeAllSubtasks();
         System.out.printf("Список эпиков: %s%n", taskManager.getAllEpics());
         System.out.printf("Список подзадач: %s%n", taskManager.getAllSubTasks());

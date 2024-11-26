@@ -108,6 +108,7 @@ public class InMemoryTaskManager {
     public void removeAllSubtasks() {
         clearEpicSubTasks();
         subTaskMap.clear();
+        epicMap.values().forEach(this::updateEpicStatus);
     }
 
     private static int nextId() {
