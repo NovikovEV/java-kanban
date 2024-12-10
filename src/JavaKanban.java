@@ -1,4 +1,5 @@
-import manager.InMemoryTaskManager;
+import manager.Managers;
+import manager.TaskManager;
 import model.Epic;
 import model.SubTask;
 import model.Task;
@@ -6,9 +7,9 @@ import model.TaskStatus;
 
 public class JavaKanban {
     public static void main(String[] args) {
-        InMemoryTaskManager taskManager = new InMemoryTaskManager();
+        TaskManager taskManager = Managers.getDefault();
 
-        //Создайте две задачи, а также эпик с двумя подзадачами и эпик с одной подзадачей
+        //Создать несколько задач разного типа.
         Task task1 = new Task(
                 "Приготовить кофе",
                 "добавить сливки",
@@ -22,16 +23,6 @@ public class JavaKanban {
 
         taskManager.addTask(task1);
         taskManager.addTask(task2);
-
-        System.out.printf("Вывод всех задач: %s%n", taskManager.getAllTasks());
-        System.out.printf("Вывод задачи по id=1: %s%n", taskManager.getTaskById(1));
-        System.out.printf("Вывод задачи по id=2: %s%n", taskManager.getTaskById(2));
-        task2.setTaskStatus(TaskStatus.IN_PROGRESS);
-        System.out.printf("Обновление задачи задачи id=2: %s%n", taskManager.updateTask(task2));
-        taskManager.deleteTaskById(1);
-        System.out.printf("Удаление задачи задачи с id=1: %s%n", taskManager.getAllTasks());
-        taskManager.removeAllTasks();
-        System.out.printf("Удаление всех задач: %s%n%n", taskManager.getAllTasks());
 
         Epic epic1 = new Epic(
                 "Уборка по дому",
@@ -69,69 +60,39 @@ public class JavaKanban {
         taskManager.addSubTask(subTask2);
         taskManager.addSubTask(subTask3);
 
-        //Распечатайте списки эпиков и подзадач.
-        System.out.printf("Список эпиков: %s%n", taskManager.getAllEpics());
-        System.out.printf("Список подзадач: %s%n", taskManager.getAllSubTasks());
+        //Вызвать разные методы интерфейса TaskManager и напечатать историю просмотров после каждого вызова.
+        System.out.println("До вызова методов getById");
+        printAllTasks(taskManager);
+        System.out.println("\nПосле вызова методов getById");
+        taskManager.getTaskById(1);
+        taskManager.getTaskById(2);
+        taskManager.getEpicById(3);
+        taskManager.getEpicById(4);
+        taskManager.getSubTaskById(5);
+        taskManager.getSubTaskById(7);
+        printAllTasks(taskManager);
+        System.out.println("\nПосле вызова 10 методов getById");
+        taskManager.getEpicById(4);
+        taskManager.getSubTaskById(5);
+        taskManager.getSubTaskById(6);
+        taskManager.getTaskById(1);
+        printAllTasks(taskManager);
+        System.out.println("\nПосле вызова 11 методов getById");
+        taskManager.getTaskById(1);
+        printAllTasks(taskManager);
+    }
 
-        //Измените статусы созданных объектов, распечатайте их.
-        subTask1.setTaskStatus(TaskStatus.IN_PROGRESS);
-        taskManager.updateSubTask(subTask1);
-        subTask2.setTaskStatus(TaskStatus.DONE);
-        subTask3.setTaskStatus(TaskStatus.DONE);
-        taskManager.updateSubTask(subTask3);
+    public static void printAllTasks(TaskManager manager) {
+        System.out.println("Задачи:");
+        manager.getAllTasks().forEach(System.out::println);
 
-        //Проверьте, что статус задачи и подзадачи сохранился, а статус эпика рассчитался по статусам подзадач
-        System.out.println("\nПосле изменения подзадач");
-        System.out.printf("Список эпиков: %s%n", taskManager.getAllEpics());
-        System.out.printf("Список подзадач: %s%n", taskManager.getAllSubTasks());
+        System.out.println("\nЭпики:");
+        manager.getAllEpics().forEach(System.out::println);
 
-        //попробуйте удалить одну из задач и один из эпиков
-        taskManager.deleteSubTaskById(5);
-        System.out.println("\nПосле удаления подзадачи c id=5");
-        System.out.printf("Список эпиков: %s%n", taskManager.getAllEpics());
-        System.out.printf("Список подзадач: %s%n", taskManager.getAllSubTasks());
+        System.out.println("\nПодзадачи:");
+        manager.getAllSubTasks().forEach(System.out::println);
 
-        taskManager.deleteEpicById(4);
-        System.out.println("\nПосле удаления эпика c id=4");
-        System.out.printf("Список эпиков: %s%n", taskManager.getAllEpics());
-        System.out.printf("Список подзадач: %s%n", taskManager.getAllSubTasks());
-
-        taskManager.removeAllEpics();
-        System.out.println("\nПосле удаления всех эпиков'");
-        System.out.printf("Список эпиков: %s%n", taskManager.getAllEpics());
-        System.out.printf("Список подзадач: %s%n", taskManager.getAllSubTasks());
-
-        Epic epic3 = new Epic(
-                "Уборка по дому",
-                "произвести уборку по всему дому"
-        );
-        taskManager.addEpic(epic3);
-        System.out.println("\nОбновление эпика'");
-        System.out.printf("Список эпиков: %s%n", taskManager.getAllEpics());
-
-
-        epic1.setTaskName("Уборка");
-        taskManager.updateEpic(epic3);
-        System.out.println("После обновления эпика'");
-        System.out.printf("Список эпиков: %s%n", taskManager.getAllEpics());
-
-        SubTask subTask4 = new SubTask(
-                epic3,
-                "Пропылесосить комнаты",
-                "тщательно",
-                TaskStatus.DONE
-        );
-        taskManager.addSubTask(subTask4);
-        System.out.println("\nВывод подзадачи по id");
-        System.out.printf("Список эпиков: %s%n", taskManager.getSubTaskById(9));
-
-        System.out.println("\nУдаление всех подзадач");
-        System.out.printf("Список эпиков: %s%n", taskManager.getAllEpics());
-        System.out.printf("Список подзадач: %s%n", taskManager.getAllSubTasks());
-
-        System.out.println("\nПосле удаление всех подзадач. Так же меняется статус эпика на NEW");
-        taskManager.removeAllSubtasks();
-        System.out.printf("Список эпиков: %s%n", taskManager.getAllEpics());
-        System.out.printf("Список подзадач: %s%n", taskManager.getAllSubTasks());
+        System.out.println("\nИстория:");
+        manager.getHistory().forEach(System.out::println);
     }
 }

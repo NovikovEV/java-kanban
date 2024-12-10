@@ -10,6 +10,10 @@ public class Epic extends Task {
         super(taskName, description, TaskStatus.NEW);
     }
 
+    public Epic(int id, String taskName, String description, TaskStatus taskStatus) {
+        super(id, taskName, description, taskStatus);
+    }
+
     @Override
     public String toString() {
         return "Epic{" +
@@ -28,19 +32,8 @@ public class Epic extends Task {
         subTasksIdList.remove((Integer) id);
     }
 
-    public Integer getSubTaskId(int subTaskId) {
-        return subTasksIdList.stream()
-                .filter(id -> id == subTaskId)
-                .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
-    }
-
     public List<Integer> getSubTasksIdList() {
         return List.copyOf(subTasksIdList);
-    }
-
-    public void setSubTasksIdList(List<Integer> newSubTasksIdList) {
-        subTasksIdList.addAll(newSubTasksIdList);
     }
 
     public void clearSubTasksList() {

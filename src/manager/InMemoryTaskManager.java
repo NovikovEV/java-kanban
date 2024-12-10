@@ -14,7 +14,8 @@ public class InMemoryTaskManager implements TaskManager{
     private final Map<Integer, Task> taskMap = new HashMap<>();
     private final Map<Integer, Epic> epicMap = new HashMap<>();
     private final Map<Integer, SubTask> subTaskMap = new HashMap<>();
-    private static int id = 1;
+    private final HistoryManager historyManager = Managers.getDefaultHistoryManager();
+    private int id = 1;
 
     @Override
     public void addTask(Task task) {
@@ -24,7 +25,9 @@ public class InMemoryTaskManager implements TaskManager{
 
     @Override
     public Task getTaskById(int id) {
-        return taskMap.get(id);
+        Task task = taskMap.get(id);
+        historyManager.add(task);
+        return task;
     }
 
     @Override
@@ -58,7 +61,9 @@ public class InMemoryTaskManager implements TaskManager{
 
     @Override
     public Epic getEpicById(int id) {
-        return epicMap.get(id);
+        Epic epic = epicMap.get(id);
+        historyManager.add(epic);
+        return epic;
     }
 
     @Override
@@ -89,7 +94,7 @@ public class InMemoryTaskManager implements TaskManager{
     @Override
     public void addSubTask(SubTask subTask) {
         subTask.setId(nextId());
-        Epic epic = getEpicById(subTask.getEpicId());
+        Epic epic = epicMap.get(subTask.getEpicId());
         epic.addSubTaskId(subTask);
 
         subTaskMap.put(subTask.getId(), subTask);
@@ -98,7 +103,9 @@ public class InMemoryTaskManager implements TaskManager{
 
     @Override
     public SubTask getSubTaskById(int id) {
-        return subTaskMap.get(id);
+        SubTask subTask = subTaskMap.get(id);
+        historyManager.add(subTask);
+        return subTask;
     }
 
     @Override
@@ -129,7 +136,12 @@ public class InMemoryTaskManager implements TaskManager{
         epicMap.values().forEach(this::updateEpicStatus);
     }
 
-    private static int nextId() {
+    @Override
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
+    }
+
+    private int nextId() {
         return id++;
     }
 

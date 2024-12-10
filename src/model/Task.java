@@ -14,6 +14,13 @@ public class Task {
         this.taskStatus = taskStatus;
     }
 
+    public Task(int id, String taskName, String description, TaskStatus taskStatus) {
+        this.id = id;
+        this.taskName = taskName;
+        this.description = description;
+        this.taskStatus = taskStatus;
+    }
+
     @Override
     public String toString() {
         return "Task{" +
@@ -29,7 +36,7 @@ public class Task {
         if (!(o instanceof Task task)) {
             return false;
         }
-        return Objects.equals(taskName, task.taskName) && Objects.equals(description, task.description) && taskStatus == task.taskStatus;
+        return id == task.id;
     }
 
     @Override
