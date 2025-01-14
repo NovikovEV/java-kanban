@@ -89,6 +89,23 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
+    void removeTaskById(){
+        historyManager.add(task1);
+        historyManager.add(epic1);
+        historyManager.add(task2);
+        historyManager.add(epic2);
+        historyManager.add(subTask1);
+        historyManager.add(subTask2);
+        historyManager.add(subTask3);
+        historyManager.remove(3);
+        historyManager.remove(1);
+
+        String expected = "[Task{id=2, taskName='Купить хлеб', description='половину буханки', taskStatus=DONE}, Epic{id=4, name=Хомяк, subTasksIdList=[], status=NEW}, SubTask{id=5, epicId=3, name=Пропылесосить комнаты, status=NEW}, SubTask{id=6, epicId=3, name=Помыть полы, status=NEW}, SubTask{id=7, epicId=4, name=Дать ему что нибудь, status=NEW}]";
+        String actually = historyManager.getHistory().toString();
+        Assertions.assertEquals(expected, actually);
+    }
+
+    @Test
     void testGetHistory() {
         historyManager.add(task1);
         historyManager.add(epic1);
@@ -117,8 +134,8 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void sizeOfStoriesShouldNotExceedTenElements() {
-        final int historySize = 10;
+    void sizeOfStoriesShouldNotExceedSevenElements() {
+        final int historySize = 7;
 
         historyManager.add(task1);
         historyManager.add(epic1);

@@ -9,7 +9,7 @@ public class JavaKanban {
     public static void main(String[] args) {
         TaskManager taskManager = Managers.getDefault();
 
-        //Создать несколько задач разного типа.
+        //Создайте две задачи, эпик с тремя подзадачами и эпик без подзадач.
         Task task1 = new Task(
                 "Приготовить кофе",
                 "добавить сливки",
@@ -50,7 +50,7 @@ public class JavaKanban {
         );
 
         SubTask subTask3 = new SubTask(
-                epic2,
+                epic1,
                 "Дать ему что нибудь",
                 "Морковь, кабачки, свекла, цветная капуста",
                 TaskStatus.NEW
@@ -59,26 +59,27 @@ public class JavaKanban {
         taskManager.addSubTask(subTask1);
         taskManager.addSubTask(subTask2);
         taskManager.addSubTask(subTask3);
+        printAllTasks(taskManager);
 
-        //Вызвать разные методы интерфейса TaskManager и напечатать историю просмотров после каждого вызова.
-        System.out.println("До вызова методов getById");
-        printAllTasks(taskManager);
-        System.out.println("\nПосле вызова методов getById");
-        taskManager.getTaskById(1);
-        taskManager.getTaskById(2);
-        taskManager.getEpicById(3);
-        taskManager.getEpicById(4);
-        taskManager.getSubTaskById(5);
+        //Запросите созданные задачи несколько раз в разном порядке
+        System.out.println("\nПосле запроса в разном порядке.");
         taskManager.getSubTaskById(7);
-        printAllTasks(taskManager);
-        System.out.println("\nПосле вызова 10 методов getById");
         taskManager.getEpicById(4);
+        taskManager.getTaskById(1);
+        taskManager.getEpicById(3);
         taskManager.getSubTaskById(5);
-        taskManager.getSubTaskById(6);
         taskManager.getTaskById(1);
+        taskManager.getEpicById(3);
+
         printAllTasks(taskManager);
-        System.out.println("\nПосле вызова 11 методов getById");
-        taskManager.getTaskById(1);
+
+        //Удалите задачу, которая есть в истории, и проверьте, что при печати она не будет выводиться.
+        System.out.println("\nПосле удаления задачи.");
+        taskManager.deleteTaskById(1);
+        printAllTasks(taskManager);
+
+        //Удалите эпик с тремя подзадачами и убедитесь, что из истории удалился как сам эпик, так и все его подзадачи.
+        taskManager.deleteEpicById(3);
         printAllTasks(taskManager);
     }
 
@@ -93,6 +94,7 @@ public class JavaKanban {
         manager.getAllSubTasks().forEach(System.out::println);
 
         System.out.println("\nИстория:");
+        //System.out.println(manager.getHistory());
         manager.getHistory().forEach(System.out::println);
     }
 }

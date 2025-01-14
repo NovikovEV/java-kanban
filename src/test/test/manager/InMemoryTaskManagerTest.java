@@ -369,7 +369,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     void testHistoryShouldNotExceedTenEentries() {
-        final int historySize = 10;
+        final int historySize = 7;
         taskManager.addTask(task1);
         taskManager.addTask(task2);
         taskManager.addEpic(epic1);
@@ -413,7 +413,7 @@ class InMemoryTaskManagerTest {
         taskManager.getEpicById(4);
 
         Assertions.assertEquals(historySize, taskManager.getHistory().size());
-        String expected = "[Epic{id=3, name=Уборка по дому, subTasksIdList=[5, 6], status=NEW}, Epic{id=4, name=Хомяк, subTasksIdList=[7], status=NEW}, SubTask{id=5, epicId=3, name=Пропылесосить комнаты, status=NEW}, SubTask{id=7, epicId=4, name=Дать ему что нибудь, status=NEW}, Epic{id=4, name=Хомяк, subTasksIdList=[7], status=NEW}, SubTask{id=5, epicId=3, name=Пропылесосить комнаты, status=NEW}, SubTask{id=6, epicId=3, name=Помыть полы, status=NEW}, Task{id=1, taskName='Приготовить кофе', description='добавить сливки', taskStatus=NEW}, SubTask{id=5, epicId=3, name=Пропылесосить комнаты, status=NEW}, Epic{id=4, name=Хомяк, subTasksIdList=[7], status=NEW}]";
+        String expected = "[Task{id=2, taskName='Купить хлеб', description='половину буханки', taskStatus=DONE}, Epic{id=3, name=Уборка по дому, subTasksIdList=[5, 6], status=NEW}, SubTask{id=7, epicId=4, name=Дать ему что нибудь, status=NEW}, SubTask{id=6, epicId=3, name=Помыть полы, status=NEW}, Task{id=1, taskName='Приготовить кофе', description='добавить сливки', taskStatus=NEW}, SubTask{id=5, epicId=3, name=Пропылесосить комнаты, status=NEW}, Epic{id=4, name=Хомяк, subTasksIdList=[7], status=NEW}]";
         String actually = taskManager.getHistory().toString();
         Assertions.assertEquals(expected, actually);
 
