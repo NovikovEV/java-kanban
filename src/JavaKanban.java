@@ -94,7 +94,6 @@ public class JavaKanban {
         manager.getAllSubTasks().forEach(System.out::println);
 
         System.out.println("\nИстория:");
-        //System.out.println(manager.getHistory());
         manager.getHistory().forEach(System.out::println);
     }
 }
