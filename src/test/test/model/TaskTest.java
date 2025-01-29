@@ -105,4 +105,11 @@ class TaskTest {
         TaskStatus actually = task1.getTaskStatus();
         Assertions.assertEquals(expected, actually);
     }
+
+    @Test
+    void testSerializeToCsv() {
+        String expected = "1,TASK,Приготовить кофе,NEW,добавить сливки\n";
+        String actually = task1.serializeToCsv();
+        Assertions.assertEquals(expected, actually);
+    }
 }

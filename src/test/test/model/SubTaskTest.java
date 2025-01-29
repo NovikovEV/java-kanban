@@ -39,4 +39,11 @@ class SubTaskTest {
         int actually = subTask.getEpicId();
         Assertions.assertEquals(expected, actually);
     }
+
+    @Test
+    void testSerializeToCsv() {
+        String expected = "1,SUBTASK,Пропылесосить комнаты,NEW,тщательно,1\n";
+        String actually = subTask.serializeToCsv();
+        Assertions.assertEquals(expected, actually);
+    }
 }
