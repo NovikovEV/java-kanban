@@ -21,6 +21,10 @@ public class Task {
         this.taskStatus = taskStatus;
     }
 
+    public String serializeToCsv() {
+        return String.format("%s,%s,%s,%s,%s\n", id, TaskType.TASK, taskName, taskStatus, description);
+    }
+
     @Override
     public String toString() {
         return "Task{" +

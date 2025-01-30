@@ -5,9 +5,12 @@ import model.SubTask;
 import model.Task;
 import model.TaskStatus;
 
+import java.io.File;
+
 public class JavaKanban {
     public static void main(String[] args) {
-        TaskManager taskManager = Managers.getDefault();
+        File file = new File("data.csv");
+        TaskManager taskManager = Managers.getFileBackedTaskManager(file);
 
         //Создайте две задачи, эпик с тремя подзадачами и эпик без подзадач.
         Task task1 = new Task(
@@ -51,36 +54,24 @@ public class JavaKanban {
 
         SubTask subTask3 = new SubTask(
                 epic1,
-                "Дать ему что нибудь",
-                "Морковь, кабачки, свекла, цветная капуста",
+                "Разобрать посудомойку",
+                "протереть посуду",
                 TaskStatus.NEW
         );
 
         taskManager.addSubTask(subTask1);
         taskManager.addSubTask(subTask2);
         taskManager.addSubTask(subTask3);
+
+        System.out.println("taskManager:");
         printAllTasks(taskManager);
 
-        //Запросите созданные задачи несколько раз в разном порядке
-        System.out.println("\nПосле запроса в разном порядке.");
-        taskManager.getSubTaskById(7);
-        taskManager.getEpicById(4);
-        taskManager.getTaskById(1);
-        taskManager.getEpicById(3);
-        taskManager.getSubTaskById(5);
-        taskManager.getTaskById(1);
-        taskManager.getEpicById(3);
+        //Создайте новый FileBackedTaskManager-менеджер из этого же файла.
+        TaskManager taskManagerFromFile = Managers.loadFromFile(file);
+        System.out.println("\ntaskManagerFromFile:");
+        printAllTasks(taskManagerFromFile);
 
-        printAllTasks(taskManager);
 
-        //Удалите задачу, которая есть в истории, и проверьте, что при печати она не будет выводиться.
-        System.out.println("\nПосле удаления задачи.");
-        taskManager.deleteTaskById(1);
-        printAllTasks(taskManager);
-
-        //Удалите эпик с тремя подзадачами и убедитесь, что из истории удалился как сам эпик, так и все его подзадачи.
-        taskManager.deleteEpicById(3);
-        printAllTasks(taskManager);
     }
 
     public static void printAllTasks(TaskManager manager) {
@@ -92,8 +83,5 @@ public class JavaKanban {
 
         System.out.println("\nПодзадачи:");
         manager.getAllSubTasks().forEach(System.out::println);
-
-        System.out.println("\nИстория:");
-        manager.getHistory().forEach(System.out::println);
     }
 }
