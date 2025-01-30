@@ -1,10 +1,7 @@
 package manager;
 
 import exception.ManagerSaveException;
-import model.Epic;
-import model.SubTask;
-import model.Task;
-import model.TaskStatus;
+import model.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -31,7 +28,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     public void load() {
-        List<String> lines = null;
+        List<String> lines;
         try {
             lines = loadFromCsv();
         } catch (ManagerSaveException e) {
@@ -52,7 +49,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try {
             save();
         } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
+            System.out.println("Произошла ошибка сохранения задачи: " + task.getTaskName());
         }
     }
 
@@ -63,7 +60,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try {
             save();
         } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
+            System.out.println("Произошла ошибка сохранения задачи: " + task.getTaskName());
         }
 
         return updatedTask;
@@ -76,7 +73,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try {
             save();
         } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
+            System.out.println("Произошла ошибка сохранения задачи c id=" + id);
         }
     }
 
@@ -87,7 +84,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try {
             save();
         } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
+            System.out.println("Произошла ошибка сохранения задач в файл при удалении.");
         }
     }
 
@@ -98,7 +95,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try {
             save();
         } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
+            System.out.println("Произошла ошибка сохранения эпика: " + epic.getTaskName());
         }
     }
 
@@ -109,7 +106,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try {
             save();
         } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
+            System.out.println("Произошла ошибка сохранения эпика: " + epic.getTaskName());
         }
     }
 
@@ -120,7 +117,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try {
             save();
         } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
+            System.out.println("Произошла ошибка сохранения эпика с id=" + id);
         }
     }
 
@@ -131,7 +128,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try {
             save();
         } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
+            System.out.println("Произошла ошибка сохранения эпиков в файл при удалении.");
         }
     }
 
@@ -142,7 +139,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try {
             save();
         } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
+            System.out.println("Произошла ошибка сохранения подзадачи: " + subTask.getTaskName());
         }
     }
 
@@ -153,7 +150,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try {
             save();
         } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
+            System.out.println("Произошла ошибка сохранения подзадачи: " + subTask.getTaskName());
         }
     }
 
@@ -164,7 +161,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try {
             save();
         } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
+            System.out.println("Произошла ошибка сохранения эпика с id=" + id);
         }
     }
 
@@ -175,7 +172,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try {
             save();
         } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
+            System.out.println("Произошла ошибка сохранения подзадач в файл при удалении.");
         }
     }
 
@@ -224,16 +221,16 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private void deSerialize(String line) {
         String[] lines = line.trim().split(",");
-
-        switch (lines[1]) {
-            case "TASK" -> super.addTask(
+        TaskType taskType = TaskType.valueOf(lines[1]);
+        switch (taskType) {
+            case TASK -> super.addTask(
                     new Task(
                             Integer.parseInt(lines[0]),
                             lines[2],
                             lines[4],
                             getTaskStatusFromString(lines[3])
                     ));
-            case "EPIC" -> super.addEpic(
+            case EPIC -> super.addEpic(
                     new Epic(
                             Integer.parseInt(lines[0]),
                             lines[2],
@@ -241,7 +238,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                             getTaskStatusFromString(lines[3])
                     ));
 
-            case "SUBTASK" -> {
+            case SUBTASK -> {
                 int subTaskId = Integer.parseInt(lines[0]);
                 int epicId = Integer.parseInt(lines[lines.length - 1]);
                 super.addSubTask(
