@@ -6,6 +6,10 @@ import model.Task;
 import model.TaskStatus;
 
 import java.io.File;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class JavaKanban {
     public static void main(String[] args) {
@@ -16,12 +20,17 @@ public class JavaKanban {
         Task task1 = new Task(
                 "Приготовить кофе",
                 "добавить сливки",
-                TaskStatus.NEW
+                TaskStatus.NEW,
+                Duration.ofMinutes(10),
+                LocalDateTime.of(LocalDate.now(), LocalTime.now())
         );
+        
         Task task2 = new Task(
-                "Купить хлеб",
-                "половину буханки",
-                TaskStatus.DONE
+                "Приготовить кофе",
+                "добавить сливки",
+                TaskStatus.NEW,
+                Duration.ofMinutes(10),
+                LocalDateTime.of(LocalDate.now(), LocalTime.now().plus(Duration.ofHours(3)))
         );
 
         taskManager.addTask(task1);
@@ -43,20 +52,26 @@ public class JavaKanban {
                 epic1,
                 "Пропылесосить комнаты",
                 "тщательно",
-                TaskStatus.NEW
+                TaskStatus.NEW,
+                Duration.ofMinutes(15),
+                LocalDateTime.of(LocalDate.now(), LocalTime.now().plus(Duration.ofMinutes(10)))
         );
         SubTask subTask2 = new SubTask(
                 epic1,
                 "Помыть полы",
                 "мыть с чистящим средством",
-                TaskStatus.NEW
+                TaskStatus.NEW,
+                Duration.ofMinutes(15),
+                LocalDateTime.of(LocalDate.now(), LocalTime.now().plus(Duration.ofMinutes(60)))
         );
 
         SubTask subTask3 = new SubTask(
                 epic1,
                 "Разобрать посудомойку",
                 "протереть посуду",
-                TaskStatus.NEW
+                TaskStatus.NEW,
+                Duration.ofMinutes(15),
+                LocalDateTime.of(LocalDate.now(), LocalTime.now().plus(Duration.ofMinutes(120)))
         );
 
         taskManager.addSubTask(subTask1);
@@ -71,7 +86,7 @@ public class JavaKanban {
         System.out.println("\ntaskManagerFromFile:");
         printAllTasks(taskManagerFromFile);
 
-
+        printAllTasks(taskManager);
     }
 
     public static void printAllTasks(TaskManager manager) {
