@@ -2,9 +2,12 @@ package manager;
 
 import exception.ManagerSaveException;
 import model.*;
+import util.DTF;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -228,14 +231,18 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                             Integer.parseInt(lines[0]),
                             lines[2],
                             lines[4],
-                            getTaskStatusFromString(lines[3])
+                            getTaskStatusFromString(lines[3]),
+                            Duration.ofMinutes(Long.parseLong(lines[5])),
+                            LocalDateTime.parse(lines[6], DTF.getDTF())
                     ));
             case EPIC -> super.addEpic(
                     new Epic(
                             Integer.parseInt(lines[0]),
                             lines[2],
                             lines[4],
-                            getTaskStatusFromString(lines[3])
+                            getTaskStatusFromString(lines[3]),
+                            Duration.ofMinutes(Long.parseLong(lines[5])),
+                            LocalDateTime.parse(lines[6], DTF.getDTF())
                     ));
 
             case SUBTASK -> {
@@ -247,7 +254,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                                 epicId,
                                 lines[2],
                                 lines[4],
-                                getTaskStatusFromString(lines[3])
+                                getTaskStatusFromString(lines[3]),
+                                Duration.ofMinutes(Long.parseLong(lines[5])),
+                                LocalDateTime.parse(lines[6], DTF.getDTF())
                         ));
             }
         }

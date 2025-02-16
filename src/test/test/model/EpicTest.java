@@ -4,6 +4,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 class EpicTest {
@@ -18,12 +22,16 @@ class EpicTest {
                 1,
                 "Хомяк",
                 "покормить хомяка",
-                TaskStatus.NEW
+                TaskStatus.NEW,
+                Duration.ofMinutes(15),
+                LocalDateTime.of(LocalDate.of(2025, 2, 15), LocalTime.of(9,0,0))
         );
 
         epic2 = new Epic(
                 "Хомяк",
-                "покормить хомяка"
+                "покормить хомяка",
+                Duration.ofMinutes(15),
+                LocalDateTime.of(LocalDate.of(2025, 2, 15), LocalTime.of(10,0,0))
         );
 
         subTask1 = new SubTask(
@@ -31,7 +39,9 @@ class EpicTest {
                 1,
                 "Пропылесосить комнаты",
                 "тщательно",
-                TaskStatus.NEW
+                TaskStatus.NEW,
+                Duration.ofMinutes(15),
+                LocalDateTime.of(LocalDate.now(), LocalTime.now().plus(Duration.ofMinutes(10)))
         );
 
         subTask2 = new SubTask(
@@ -39,13 +49,15 @@ class EpicTest {
                 1,
                 "Помыть полы",
                 "мыть с чистящим средством",
-                TaskStatus.NEW
+                TaskStatus.NEW,
+                Duration.ofMinutes(15),
+                LocalDateTime.of(LocalDate.now(), LocalTime.now().plus(Duration.ofMinutes(10)))
         );
     }
 
     @Test
     void testToString() {
-        String expected = "Epic{id=1, name=Хомяк, subTasksIdList=[], status=NEW}";
+        String expected = "Epic{id=1, name=Хомяк, subTasksIdList=[], status=NEW, duration=15, startTime=09:00:00/15.02.2025, endTime=09:15:00/15.02.2025}";
         String actually = epic1.toString();
         Assertions.assertEquals(expected, actually);
     }
@@ -90,7 +102,7 @@ class EpicTest {
 
     @Test
     void testSerializeToCsv() {
-        String expected = "1,EPIC,Хомяк,NEW,покормить хомяка,[]\n";
+        String expected = "1,EPIC,Хомяк,NEW,покормить хомяка,15,09:00:00/15.02.2025,09:15:00/15.02.2025,[]\n";
         String actually = epic1.serializeToCsv();
         Assertions.assertEquals(expected, actually);
     }

@@ -1,15 +1,20 @@
 package model;
 
+import util.DTF;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class SubTask extends Task {
     private int epicId;
 
-    public SubTask(Epic epic, String taskName, String description, TaskStatus taskStatus) {
-        super(taskName, description, taskStatus);
+    public SubTask(Epic epic, String taskName, String description, TaskStatus taskStatus, Duration duration, LocalDateTime startTime) {
+        super(taskName, description, taskStatus, duration, startTime);
         this.epicId = epic.getId();
     }
 
-    public SubTask(int id, int epicId, String taskName, String description, TaskStatus taskStatus) {
-        super(id, taskName, description, taskStatus);
+    public SubTask(int id, int epicId, String taskName, String description, TaskStatus taskStatus, Duration duration, LocalDateTime startTime) {
+        super(id, taskName, description, taskStatus, duration, startTime);
         this.epicId = epicId;
     }
 
@@ -20,12 +25,25 @@ public class SubTask extends Task {
                 ", epicId=" + epicId +
                 ", name=" + getTaskName() +
                 ", status=" + getTaskStatus() +
+                ", duration=" + getDuration().toMinutes() +
+                ", startTime=" + getStartTime().format(DTF.getDTF()) +
+                ", endTime=" + getEndTime().format(DTF.getDTF()) +
                 '}';
     }
 
     @Override
     public String serializeToCsv() {
-        return String.format("%s,%s,%s,%s,%s,%s\n", getId(), TaskType.SUBTASK, getTaskName(), getTaskStatus(), getDescription(), getEpicId());
+        return String.format(
+                "%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
+                getId(),
+                TaskType.SUBTASK,
+                getTaskName(),
+                getTaskStatus(),
+                getDescription(),
+                getDuration().toMinutes(),
+                getStartTime().format(DTF.getDTF()),
+                getEndTime().format(DTF.getDTF()),
+                getEpicId());
     }
 
     public void setEpicId(int epicId) {
