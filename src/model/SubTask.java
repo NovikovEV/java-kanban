@@ -1,6 +1,6 @@
 package model;
 
-import util.DTF;
+import util.DataTimeFormat;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -26,8 +26,8 @@ public class SubTask extends Task {
                 ", name=" + getTaskName() +
                 ", status=" + getTaskStatus() +
                 ", duration=" + getDuration().toMinutes() +
-                ", startTime=" + getStartTime().format(DTF.getDTF()) +
-                ", endTime=" + getEndTime().format(DTF.getDTF()) +
+                ", startTime=" + getStartTime().format(DataTimeFormat.getDTF()) +
+                ", endTime=" + getEndTime().format(DataTimeFormat.getDTF()) +
                 '}';
     }
 
@@ -41,8 +41,8 @@ public class SubTask extends Task {
                 getTaskStatus(),
                 getDescription(),
                 getDuration().toMinutes(),
-                getStartTime().format(DTF.getDTF()),
-                getEndTime().format(DTF.getDTF()),
+                getStartTime().format(DataTimeFormat.getDTF()),
+                getEndTime().format(DataTimeFormat.getDTF()),
                 getEpicId());
     }
 
