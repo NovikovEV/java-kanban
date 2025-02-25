@@ -1,6 +1,6 @@
 package model;
 
-import util.DTF;
+import util.DataTimeFormat;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -48,8 +48,8 @@ public class Task {
                 taskName, taskStatus,
                 description,
                 duration.toMinutes(),
-                startTime.format(DTF.getDTF()),
-                endTime.format(DTF.getDTF()));
+                startTime.format(DataTimeFormat.getDTF()),
+                endTime.format(DataTimeFormat.getDTF()));
     }
 
     @Override
@@ -60,8 +60,8 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", taskStatus=" + taskStatus +
                 ", duration=" + duration.toMinutes() +
-                ", startTime=" + startTime.format(DTF.getDTF()) +
-                ", endTime=" + endTime.format(DTF.getDTF()) +
+                ", startTime=" + startTime.format(DataTimeFormat.getDTF()) +
+                ", endTime=" + endTime.format(DataTimeFormat.getDTF()) +
                 '}';
     }
 

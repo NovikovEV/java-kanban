@@ -3,7 +3,7 @@ package model;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import util.DTF;
+import util.DataTimeFormat;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -20,7 +20,7 @@ class TaskTest {
                 "добавить сливки",
                 TaskStatus.NEW,
                 Duration.ofMinutes(10),
-                LocalDateTime.parse("16:07:00/10.07.2025", DTF.getDTF())
+                LocalDateTime.parse("16:07:00/10.07.2025", DataTimeFormat.getDTF())
         );
 
         task2 = new Task(
@@ -29,7 +29,7 @@ class TaskTest {
                 "половину буханки",
                 TaskStatus.DONE,
                 Duration.ofMinutes(40),
-                LocalDateTime.parse("17:12:00/10.07.2025", DTF.getDTF())
+                LocalDateTime.parse("17:12:00/10.07.2025", DataTimeFormat.getDTF())
         );
     }
 
