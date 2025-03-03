@@ -14,16 +14,16 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class HttpTaskServer {
-    private final int PORT;
-    private final String HOSTNAME;
+    private final int port;
+    private final String hostname;
     private final HttpServer httpServer;
 
-    public HttpTaskServer(int PORT, String HOSTNAME, TaskManager taskManager) throws IOException {
-        this.PORT = PORT;
-        this.HOSTNAME = HOSTNAME;
+    public HttpTaskServer(int port, String hostname, TaskManager taskManager) throws IOException {
+        this.port = port;
+        this.hostname = hostname;
 
         httpServer = HttpServer.create();
-        httpServer.bind(new InetSocketAddress(HOSTNAME, PORT), 0);
+        httpServer.bind(new InetSocketAddress(hostname, port), 0);
 
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Duration.class, new DurationAdapter())
@@ -37,7 +37,7 @@ public class HttpTaskServer {
     }
 
     public void start() {
-        System.out.printf("Сервер доступен по адресу http://%s:%d\n", HOSTNAME, PORT);
+        System.out.printf("Сервер доступен по адресу http://%s:%d\n", hostname, port);
         httpServer.start();
     }
 
