@@ -1,6 +1,7 @@
 package manager;
 
 import exception.InvalidTaskTimeException;
+import exception.ManagerException;
 import model.Epic;
 import model.SubTask;
 import model.Task;
@@ -27,7 +28,7 @@ public class InMemoryTaskManager implements TaskManager{
         try {
             validateTask(task);
         } catch (InvalidTaskTimeException e) {
-            System.err.println(e.getMessage());
+            throw new ManagerException(e.getMessage());
         }
 
         taskMap.put(task.getId(), task);
@@ -38,7 +39,12 @@ public class InMemoryTaskManager implements TaskManager{
     public Optional<Task> getTaskById(int id) {
         Task task = taskMap.get(id);
         historyManager.add(task);
-        return Optional.of(task);
+
+        if (task != null) {
+            return Optional.of(task);
+        }
+
+        return Optional.empty();
     }
 
     @Override
@@ -51,7 +57,7 @@ public class InMemoryTaskManager implements TaskManager{
         try {
             validateTask(task);
         } catch (InvalidTaskTimeException e) {
-            System.err.println(e.getMessage());
+            throw new ManagerException(e.getMessage());
         }
 
         if (taskMap.containsKey(task.getId())) {
@@ -83,7 +89,12 @@ public class InMemoryTaskManager implements TaskManager{
     public Optional<Epic> getEpicById(int id) {
         Epic epic = epicMap.get(id);
         historyManager.add(epic);
-        return Optional.of(epic);
+
+        if (epic != null) {
+            return Optional.of(epic);
+        }
+
+        return Optional.empty();
     }
 
     @Override
@@ -120,7 +131,7 @@ public class InMemoryTaskManager implements TaskManager{
         try {
             validateTask(subTask);
         } catch (InvalidTaskTimeException e) {
-            System.err.println(e.getMessage());
+            throw new ManagerException(e.getMessage());
         }
 
         Epic epic = epicMap.get(subTask.getEpicId());
@@ -137,7 +148,12 @@ public class InMemoryTaskManager implements TaskManager{
     public Optional<SubTask> getSubTaskById(int id) {
         SubTask subTask = subTaskMap.get(id);
         historyManager.add(subTask);
-        return Optional.of(subTask);
+
+        if (subTask != null) {
+            return Optional.of(subTask);
+        }
+
+        return Optional.empty();
     }
 
     @Override
@@ -199,6 +215,10 @@ public class InMemoryTaskManager implements TaskManager{
         return id++;
     }
 
+    public List<SubTask> getListSubTasksByEpicId(List<Integer> subTaskIds) {
+        return subTaskIds.stream().map(subTaskMap::get).toList();
+    }
+
     private void updateEpicStatus(Epic epic) {
         if (epic.getSubTasksIdList().isEmpty()) {
             epic.setTaskStatus(TaskStatus.NEW);
@@ -235,10 +255,6 @@ public class InMemoryTaskManager implements TaskManager{
         }
     }
 
-    private List<SubTask> getListSubTasksByEpicId(List<Integer> subTaskIds) {
-        return subTaskIds.stream().map(subTaskMap::get).toList();
-    }
-
     private void clearEpicSubTasks() {
         epicMap.values().forEach(Epic::clearSubTasksList);
     }
@@ -260,6 +276,9 @@ public class InMemoryTaskManager implements TaskManager{
     }
 
     private LocalDateTime getMinimalDateTime(Epic epic) {
+        if (epic.getSubTasksIdList().isEmpty()) {
+            return LocalDateTime.now();
+        }
         return epic.getSubTasksIdList().stream()
                 .map(subTaskMap::get)
                 .map(Task::getStartTime)
